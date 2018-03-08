@@ -1,0 +1,103 @@
+ /*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-project2.c
+
+ @brief:This file intilises all the buffers, generates buffer report and
+ 	 	- takes care of displaying required elements through UART.
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:28 November 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"uart.h"
+#include"cb.h"
+#include "project2.h"
+#include<string.h>
+#include"profiler.h"
+
+
+/*---------------------------------------------------------------------------------------------------------------------*/
+/* Global declaration */
+//uint32_t end,elapsed;
+//uint8_t overflow;
+uint8_t ki;
+uint8_t *pointer=&ki;
+CB_t *tx;
+CB_t *rx;
+uint8_t  *loc;
+uint8_t c;
+uint8_t f;
+uint8_t alphacount=0;
+uint8_t numericcount=0, punctuationcount=0;
+uint8_t count=0;
+uint8_t b;
+uint8_t *receive=&b;
+uint8_t s1=10;
+uint8_t s2=10;
+uint8_t e;
+uint8_t *receivea=&e;
+uint8_t logging_enable=1;
+/*---------------------------------------------------------------------------------------------------------------------*/
+
+/* Function declaration */
+/*
+  @brief: Calling of all initialise function and displaying the report
+
+  This function calls all the initialization functions and takes care of displaying the required
+  elements on the serial terminal
+
+ @param: None
+
+ @return: None
+ */
+
+/*----------------------------------------------------------------------------------------------------------------------------*/
+void project2()
+{
+	tx=malloc(sizeof(CB_t));
+	rx=malloc(sizeof(CB_t));
+	CB_init(tx,20);					/*Initializing the circular buffer for storing character*/
+	CB_init(rx,20);					/*Initializing the buffer for transmitting character to terminal*/
+	UART_configure();				/* Configuring UART*/
+	RTC_init();
+	GPIO_INITIALIZATION();
+			SYSTEM_INITIALISED();//System initialized logger
+			SysTick_init();//Starts Systick timer
+					PROFILING_STARTED();
+					//end =SysTick->VAL;
+					//elapsed=overflow*(SysTick->LOAD)+((SysTick->LOAD)-end);
+					PROFILING_COMPLETED();
+					//SysTick->CTRL=0;
+					PROFILING_RESULT();
+					while(1)
+					{
+						while(count<30);
+						DATA_ANALYSIS_STARTED();// Data analysis logger
+						DATA_PUNCTUATION_COUNT();//Punctuation count logger
+						DATA_ALPHA_COUNT();//Alphabetic count logger
+						DATA_NUMERIC_COUNT();//Numeric count logger
+						//DATA_ANALYSIS_COMPLETED();//Data analysis completed logger
+						log_flush();//Removes all element from buffer
+						count=0;
+					}
+					SYSTEM_HALTED();
+
+}
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////

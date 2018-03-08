@@ -1,0 +1,165 @@
+/*
+
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-Cb.h
+
+ @brief:This file includes various circular buffer operation like additem,removeitem,peek,destroy,isbufferfull,isbufferempty
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:21 October 2017
+
+
+ */
+
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+#ifndef INCLUDES_CB_H_
+#define INCLUDES_CB_H_
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+/* 2. Enumeration Declaration*/
+typedef enum {full,empty,null,success,stillspace,outofbound,destroyed} CB_status;
+/*-----------------------------------------------------------------------------------------------------------------------------------------*/
+/*3. Structure Declaration*/
+
+typedef struct
+{
+    uint8_t * buffptr;
+    uint8_t *head;
+    uint8_t *tail;
+    uint8_t length;
+    uint8_t count;
+} CB_t;
+/*----------------------------------------------------------------------------------------------------------------------------*/
+
+/*Logger buffer*/
+typedef struct
+{
+	uint8_t id[3];
+    uint8_t LOG_ID;
+    uint8_t Rtc[5];
+    uint8_t timestamp;
+    uint8_t loglen[7];
+    uint8_t loglength;
+    uint8_t check[9];
+    uint8_t checksum;
+    uint8_t overhead[8];
+    uint8_t payload[14];
+
+} Log;
+Log LB_t;
+
+//LB_t *logptr=malloc(sizeof(LB_t));
+
+//CB_status LB_init(LB_t *lbp,uint8_t length);
+/*----------------------------------------------------------------------------------------------------------------------------*/
+//uint8_t temp=0;
+/*
+  @brief: Initialises the Circular Buffer.
+
+  Given a circular buffer, this will initialize the head pointer,tail pointercount and length.
+
+ @param: Pointer to circular buffer
+ @param:length of buffer
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+CB_status CB_init(CB_t *ptr,uint8_t length);
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Checks Whether the Circular Buffer is full.
+
+  Given a pointer to circular buffer, this will check whether circular buffer is full.
+
+ @param: Pointer to circular buffer
+
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+CB_status CB_is_full(CB_t *ptr);
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Check Whether the Circular Buffer is empty.
+
+  Given a circular buffer, this will check Whether circular buffer is empty.
+
+ @param: Pointer to circular buffer
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+CB_status CB_is_empty(CB_t *ptr);
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Destroys the circular buffer.
+
+  Given a pointer to circular buffer, this function will destroy the circular buffer.
+
+ @param: Pointer to circular buffer
+
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+CB_status CB_destroy(CB_t *ptr);
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Adds item to Circular Buffer.
+
+  Given a circular buffer, this will add item to the location pointed by head pointer.
+
+ @param: Pointer to circular buffer
+ @param:Data to be inserted at the head pointer location
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+CB_status CB_buffer_add_item(CB_t *ptr,uint8_t data);
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Removes item from the circular buffer.
+
+  Given a circular buffer, this will remove the item from location pointed out by tail pointer.
+
+ @param: Pointer to circular buffer
+ @param:Variable in which data that is removed is stored.
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+CB_status CB_buffer__buffer_remove_item(CB_t *ptr,uint8_t *temp);
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Peeks data in circular buffer.
+
+  Given a circular buffer, this will peek data in position which is passed as parameter to this function.
+
+ @param: Pointer to circular buffer
+ @param:Position to peek into.
+ @param:Pointer in which the peeked data is stored.
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+CB_status CB_peek(CB_t *ptr,uint8_t position,uint8_t *temp);
+
+
+
+#endif /* INCLUDES_CB_H_ */
+
+
+
+
+
+

@@ -1,0 +1,195 @@
+/*
+ * Copyright (c) 2015, Freescale Semiconductor, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*--------------------------------------------------------------------------------------------------------------------*/
+#include "MKL25Z4.h"
+#include"uart.h"
+
+#define TRANSFER (8)// Sets the number of bytes to be transferred
+#define LENGTH (7)// Block of data to be transferred
+//#define SETVALUE (5) //This value is used is memset function
+/**************************************************************************************************************************************/
+ /*
+  @brief: To configure UART
+
+  Configure the UART by setting its appropriate register
+
+ @param: None
+
+
+ @return: None
+ */
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void UART_configure()
+{
+	uint16_t baud_divisor;
+	SIM_SCGC4 |= 0x00000400;            // enable clock for UART(10th bit in SCGC5)
+	SIM_SOPT2 |= 0x04000000;            // use FLL output for UART(Bit 27th and 26th)
+	UART0_C2 &= 0XF3;              // Disable transmit and receive pin(Bit 2nd and Bit 3rd of C2)
+	/*---------------------BAUD RATE-----------------------------------------------*/
+
+	/* BAUD RATE=(SYSTEM CLOCK)/((OSR+1)*SBR)
+	 * ASSUME THAT WE WANT BAUD RATE TO 38400
+	 * SYSTEM CLOCK =20.9MHz
+	 * OSR=3
+	 * SBR=312
+	 * BAUD RATE WITH ABOVE VALUES WILL COME OUT TO 38467.5 WHICH IS CLOSE TO OUR REQUIRED BAUD RATE THAT IS 38400
+	 *
+	 */
+	baud_divisor= (uint16_t)(DEFAULT_SYSTEM_CLOCK/(baud *16));// Get the value of SBR to be loaded into BDH and BDL register
+	UART0_BDH |= (baud_divisor >> 8) & 0x1F; //ANDED with 0x1F because BDH lies from Bit 0 Bit 4
+	UART0_BDL = (baud_divisor & 0XFF);	//ANDED with 0xFF because BDL lies from bit 0 to bit 7
+	//UART0_BDH = 0x00;             // Select BAUD rate as 38400(Bit 0 to bit 4 of BDH)
+	//UART0_BDL = 0x22;            // Select BAUD rate as 38400(Bit 0 to Bit 7 of BDL)
+	UART0_C4 = 0x0F;              // Over Sampling Ratio 16(Set OSR to 15)
+	UART0_C1 = 0x00000000;              // Select 8-bit mode
+	UART0_C2 |= 0X2C;              // enable transmit and receive pins(Bit 2nd and Bit 3rd of C2)
+    SIM_SCGC5 |= 0x00000200;            // enable clock for PORTA(Bit 9th in SCGC5)
+    PORTA_PCR1 = 0x00000200;            // Select PTA1 as Receive pin
+    PORTA_PCR2 = 0x00000200;            // Select PTA2 as Transmit pin
+
+
+	/*-----------------------------ENABLING INTERRUPT-------------------------------------*/
+
+	NVIC->ISER[0]=0X00001000;//ENABLE INTERRUPT WHICH IS BIT 12 IN ISER REGISTER(IRQ 12 CORRESPONDS TO UART0 INTERRUPT)*/
+}
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: UART IRQ handler
+
+  Contains transmit and receive interrupt which gets triggered when UART_D register is full or empty
+
+ @param: None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void UART0_IRQHandler()
+{
+	// If UART0_D register gets full,receive interrupt gets activated
+	if((UART0_S1 & 0x20)==0x20)
+	{
+		*pointer=UART0_D;	//Copy value of UART0_D register into a pointer
+		UART0_D=*pointer;
+		pointer++;
+		count++;
+	}
+	//If UART0_D register becomes empty, transmit interrupt gets activated
+
+
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+void DMA_init(){
+		uint8_t a;
+
+
+		SIM_SOPT2|=0X00010000; // Select PLL/2
+
+
+		SIM_SCGC7=0X00000100; //Enable clock to DMA module
+
+		/*-------------------------------------------*/
+		//Set control register
+		DMA_DCR0=(1<<31);//Enable interrupt on complete
+		DMA_DCR0|=(1<<22); // Increments source address on each transfer of data(depends on size)
+		DMA_DCR0|=(1<<19); // Increments destination address after transfer is complete(depends on size)
+
+		#ifdef TRANSFER
+		#if (TRANSFER==8)
+		#define x (1)
+		#elif (TRANSFER==16)
+		#define x (2)
+		#else
+		#define x (0)
+		#endif
+		#endif
+
+		DMA_DCR0|=DMA_DCR_SSIZE(x);// 8 bit size(bit 20-21)
+		DMA_DCR0|=DMA_DCR_DSIZE(x);// 8 bit size(bit 17-18)
+
+
+		/*--------------------------------------------*/
+
+		DMA_SAR0=(pointer-length); //Set source address()
+		DMA_DAR0=0x20000000 ;//Set Destination address()
+		DMA_DSR_BCR0=7; //No. of bytes to be transferred
+		DMA_DSR_BCR0 &=~(0x01000000); // Clear DONE bit in BCR0(BIT 24)
+	    DMA_DCR0|=0x00010000; // Start transfer by setting start bit(bit 16)
+
+	    NVIC->ISER[0]=0X00000001;
+
+
+		}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief:IRQ handler for DMA operations
+
+  When the specified  block of memory is being transfered, this IRQ handler gets invoked
+
+ @param:None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void DMA0_IRQHandler(){
+
+
+DMA_DSR_BCR0|=(1<<24); //SETS DONE BIT(BIT 24)
+
+
+}
+/*****************************************************************************************************************************/
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief:Main function that initialises UART and DMA and which performs DMA transfer of length which is defined in macro
+
+  Initialises UART and DMA to perform DMA transfer of required length specified in macro
+
+ @param:None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+int main(void)
+{
+
+	UART_configure();
+	while(1){
+	while(count<length);
+	DMA_init();
+	}
+}
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////

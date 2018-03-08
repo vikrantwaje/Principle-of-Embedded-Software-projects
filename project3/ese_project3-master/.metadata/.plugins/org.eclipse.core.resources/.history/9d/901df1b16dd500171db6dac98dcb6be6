@@ -1,0 +1,81 @@
+/*
+ * main.c
+ *
+ *  Created on: Nov 27, 2017
+ *      Author: Preshit
+ */
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdint.h>
+#include "MKL25Z4.h"
+
+void LED_Init();
+void TPM2_Init();
+void TPM2_IRQHandler(void);
+void SysTick_Init();
+int start;
+int end1;
+int end2;
+int latency1;
+int latency2;
+
+int main(void)
+{
+	SystemCoreClockUpdate();
+	SystemInit();
+	SysTick_Init();
+	start = SysTick->VAL;
+	//end1 = SysTick->VAL;
+	latency1 = start - end1;
+	NVIC->ISPR[0] = 1<<19;
+	LED_Init();
+	TPM2_Init();
+}
+
+void LED_Init()
+{
+	SIM_BASE_PTR->SCGC5 |= SIM_SCGC5_PORTB_MASK; // enable clock for PORT B
+	PORTB_BASE_PTR->PCR[18] = PORT_PCR_MUX(1);   // select pin 18 of PORT B as led output
+	GPIOB->PDDR |= 1 << 18;						 // set direction as output
+}
+
+void SysTick_Init()
+{
+	SysTick->LOAD = 0x00FFFFFF;
+	SysTick->VAL = 5;
+	SysTick->CTRL = 0x00000003;
+}
+
+void TPM2_Init()
+{
+	SIM->SOPT2 &= ~(SIM_SOPT2_PLLFLLSEL_MASK);
+	SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL(1); 		 // Selecting PLL clock mode
+	SIM->SOPT2 &= ~(SIM_SOPT2_TPMSRC_MASK);
+	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);  		 // Using MCGFLLPLL
+
+	SIM_BASE_PTR->SCGC6 |= SIM_SCGC6_TPM2_MASK;  // enable clock for TPM2
+
+	TPM2_SC = 0x00;								 // clear count
+
+	TPM2_SC |= TPM_SC_PS(6);					 // set prescale 64
+	TPM2_BASE_PTR->MOD = 37453;					 // set mod register value 37453
+	TPM2_SC |= (TPM_SC_TOIE_MASK);				 // enable timer overflow interrupt
+
+	NVIC_EnableIRQ(TPM2_IRQn);
+
+	TPM2_SC |= TPM_SC_CMOD(1);  				 // enable counter
+}
+
+void TPM2_IRQHandler(void)
+{
+	end2 = SysTick->VAL;
+	latency2 = start - end2;
+	if(TPM2_SC & TPM_SC_TOF_MASK)
+	{
+		TPM2_SC =0x00;
+		TPM2->CNT = 0;							 // clear count
+		GPIOB->PTOR = 1 << 18; 					 // toggle red led every 50ms
+		TPM2_SC &= ~TPM_SC_TOF_MASK;			 // clear timer overflow flag
+	}
+}

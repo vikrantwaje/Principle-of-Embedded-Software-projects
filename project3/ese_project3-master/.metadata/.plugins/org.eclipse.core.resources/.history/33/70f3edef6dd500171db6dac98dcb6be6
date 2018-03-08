@@ -1,0 +1,72 @@
+/*
+ * main.c
+ *
+ *  Created on: Nov 27, 2017
+ *      Author: Preshit
+ */
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdint.h>
+#include "MKL25Z4.h"
+void SysTick_Init();
+int start;
+int end1;
+int end2;
+int latency1;
+int latency2;
+
+void UART_configure()
+{
+	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK; 							/* Enable GPIOA Clock */
+	SIM->SCGC4 |= SIM_SCGC4_UART0_MASK; 							/* Enable UART0 Clock */
+
+	PORTA_PCR1 |= PORT_PCR_MUX(2); 									/* Configuring PCR1 to alt2 for UART0 */
+	PORTA_PCR2 |= PORT_PCR_MUX(2); 									/* Configuring PCR2 to alt2 for UART0 */
+
+	SIM->SOPT2 &= ~(SIM_SOPT2_PLLFLLSEL_MASK);
+	SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL(1); 							/* Selecting PLL clock mode */
+	SIM->SOPT2 |= SIM_SOPT2_UART0SRC(1);  							/* Using MCGFLLPLL */
+
+	uint16_t baud_rate = 38400; 								/* Setting baud rate registers */
+	UART0_BDL = (uint8_t)(baud_rate & UART0_BDL_SBR_MASK) ;
+	UART0_BDH = (uint8_t)((baud_rate>>8) & UART0_BDH_SBR_MASK);
+
+	UART0_C1 = 0x00;												/* Configuring C1 control register */
+	UART0_C3 = 0x00; 												/* Configuring C3 control register */
+	UART0_S1 = 0x00; 												/* Configuring S1 status register */
+	UART0_C4 = UART0_C4_OSR(15); 									/* Setting OSR bit field to 16 */
+
+	UART0_C2 &= ~(UART0_C2_RE_MASK | UART0_C2_TE_MASK); 			/* Clear TE and RE */
+	UART0_C2 |=  (UART0_C2_RE_MASK | UART0_C2_TE_MASK); 			/* Set TE and RE */
+	UART0_C2 |= UART0_C2_RIE_MASK; 									/* Set RIE */
+
+	NVIC_EnableIRQ(UART0_IRQn);										/* Enable UART0 Interrupt */
+
+
+}
+void UART0_IRQHandler()
+{
+
+	end2 = SysTick->VAL;
+		latency2 = start - end2;
+		uint8_t a=0;
+}
+
+void SysTick_Init()
+{
+	SysTick->LOAD = 0x00FFFFFF;
+	SysTick->VAL = 5;
+	SysTick->CTRL = 0x00000003;
+}
+void main(){
+	UART_configure();
+	SystemCoreClockUpdate();
+	SystemInit();
+	SysTick_Init();
+	start = SysTick->VAL;
+	end1 = SysTick->VAL;
+	latency1 = start - end1;
+	NVIC->ISPR[0] = 1<<12;
+
+}

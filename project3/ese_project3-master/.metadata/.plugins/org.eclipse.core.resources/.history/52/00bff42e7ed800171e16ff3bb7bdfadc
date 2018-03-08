@@ -1,0 +1,388 @@
+/*
+ * Copyright (c) 2015, Freescale Semiconductor, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-nrf.c
+
+ @brief:This file includes various nrf initialisation operations
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:23 November 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+#include "MKL25Z4.h"
+#include<stddef.h>
+#include"spi.h"
+#include"nrf.h"
+
+/*----------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------Macros*-------------------------------------------------------------------------*/
+//PA18 AS CHIP SELECT
+
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Chip enable
+
+  This macro basically enables chip select
+
+ @param:None
+
+
+ @return: None.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void nrf_chip_enable(){
+	SIM->SCGC5|=(1<<11);
+		PORTC->PCR[4]=(1<<8);
+		GPIOC_PDDR=(1<<4);
+		GPIOC_PCOR=(1<<4);
+
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Chip disable
+
+  This macro basically disables chip select
+
+ @param:None
+
+
+ @return: None.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void nrf_chip_disable(){
+	SIM->SCGC5|=(1<<11);
+		PORTC->PCR[4]=(1<<8);
+		GPIOC_PDDR=(1<<4);
+		GPIOC_PSOR=(1<<4);
+
+
+}
+/*------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read register
+
+  This function basically reads register
+
+ @param:Address of register that is to be read
+
+
+ @return: Value that is to be returned after being read.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+
+uint8_t nrf_read_register(uint8_t registeraddress){
+	uint8_t r,r1,r2;
+	//Make CSN low
+	nrf_chip_enable();
+	//Send command byte
+	SPI_write_byte(registeraddress);
+    SPI_read_byte(r1);
+	SPI_write_byte(0xFF);
+	SPI_read_byte(r2);
+	nrf_chip_disable();
+	return(SPI0_D);
+	//make CSN high
+
+
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write register
+
+  This function basically writes register
+
+ @param:Address of register that is to be written
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void nrf_write_register(uint8_t registeraddress,uint8_t value){
+	uint8_t r,r1;
+	//Make CSN low
+	nrf_chip_enable();
+	SPI_write_byte(registeraddress);
+	//SPI_write_byte(0xFF);
+
+	SPI_write_byte(value);
+	SPI_read_byte(r);
+	//Make CSN high
+	nrf_chip_disable();
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read status
+
+  This function reads status from status register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t nrf_read_status(){
+
+	uint8_t status=nrf_read_register(0x07);//07 is address of status register
+	return(status);
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write configuration
+
+  This function writes into configuration register
+
+ @param:configuration that is to be set
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_write_config(uint8_t config){
+
+	nrf_write_register(0x20,config);//0x00 is address for config register.
+
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read configuration
+
+  This function reads from configuration register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t read_config(){
+
+	uint8_t config=nrf_read_register(0x00);//00 is address of config register
+	return(config);
+
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read rf setup
+
+  This function reads from configuration register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t nrf_read_rf_setup(){
+
+	uint8_t setup=nrf_read_register(0x06);//06 is address of RF setup register
+	return(setup);
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write rf setup
+
+  This function write to configuration register
+
+ @param:Configuration that is to be written
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void nrf_write_rf_setup(uint8_t config){
+
+	nrf_write_register(0x26,config);
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read rf channel
+
+  This function reads from RF channel register
+
+ @param:None
+
+
+ @return:Returns value that is read
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t nrf_read_rf_ch(){
+	uint8_t ch=nrf_read_register(0x05);//05 is the address of RF channel register
+	return(ch);
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write rf channel register
+
+  This function write to rf channel register
+
+ @param:Channel that is to be written
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_write_rf_ch(uint8_t channel){
+
+	nrf_write_register(0x25,channel);
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read TX ADDR channel
+
+  This function reads from TX ADDR register
+
+ @param: Address of TX addr register
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_read_TX_ADDR(uint8_t address){
+	uint8_t r,r1;
+	uint8_t *result;
+	//Make CS low
+	nrf_chip_enable();
+	SPI_write_byte(0x10);//10 is address for TX_ADDR
+	SPI_read_byte(r);
+	//Send five dummy bytes
+	SPI_write_byte(0x10);
+	SPI_read_byte(r);
+
+	for(r1=0;r1<5;r1++){
+	SPI_write_byte(0x10);
+	*(result+r1)=SPI_read_byte(r1);
+	}*/
+	nrf_chip_disable();
+	//Make CS high
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write TX ADDR channel
+
+  This function writes into TX ADDR register
+
+ @param: Address of TX addr register
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_write_TX_ADDR(uint8_t *tx_addr){
+
+	//Make CS low
+		nrf_chip_enable();
+		SPI_write_byte(0x20);//10 is address for TX_ADDR
+		//Send five data bytes
+		SPI_write_byte(0x30);
+		SPI_write_byte(0x40);
+		SPI_write_byte(0x50);
+		SPI_write_byte(0x60);
+		SPI_write_byte(0x70);
+		//Make CS high
+		nrf_chip_disable();
+
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read rf_fifo status channel
+
+  This function reads from fifo status register
+
+ @param:None
+
+
+ @return:Returns status that is read
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t nrf_read_fifo_status(){
+	uint8_t fifostatus=nrf_read_register(0x17);
+	return(fifostatus);
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF flush tx fifo
+
+  This function flushes the tx fifo register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_flush_tx_fifo(){
+
+	SPI_write_byte(0xE1);
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF flush rx fifp
+
+  This function flushes the rx fifo register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_flush_rx_fifo(){
+	SPI_write_byte(0xE2);
+}
+
+/*void main(){
+	SPI_init();
+	uint8_t temp;
+
+
+	SPI_write_byte(0x08);
+	uint8_t byte1=SPI_read_byte(temp);
+
+
+while(1)
+	;
+}*/
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////

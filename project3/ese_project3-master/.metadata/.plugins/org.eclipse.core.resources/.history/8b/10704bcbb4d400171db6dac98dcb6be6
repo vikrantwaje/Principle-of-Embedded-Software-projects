@@ -1,0 +1,11 @@
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stddef.h>
+
+
+
+
+
+
+int8_t*ptr=(uint8_t*)&BUFFER;
+

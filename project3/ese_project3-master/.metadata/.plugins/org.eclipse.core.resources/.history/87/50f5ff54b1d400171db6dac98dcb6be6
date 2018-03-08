@@ -1,0 +1,15 @@
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stddef.h>
+#define LOCATE_FUNC  __attribute__((__section__(".mysection")))
+
+
+
+	void LOCATE_FUNC Delay(uint32_t dlyTicks)
+	{
+	  uint32_t curTicks;
+
+	  curTicks = msTicks;
+	  while ((msTicks - curTicks) < dlyTicks) ;
+	}
+

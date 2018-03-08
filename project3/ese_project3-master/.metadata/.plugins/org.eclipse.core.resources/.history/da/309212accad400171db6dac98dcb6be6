@@ -1,0 +1,178 @@
+/*
+ * Copyright (c) 2015, Freescale Semiconductor, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-main.c
+
+ @brief:This file includes profiling function to calculate the number of cycles used by the code
+
+ @author: Vikrant Waje
+
+ @date:24 November 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+
+#include "MKL25Z4.h"
+#include<stdint.h>
+
+static uint64_t overflow=0;
+uint32_t start,end,elapsed;
+float profile;
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief:IRQ handler for TPM module
+
+  This handler gets invoked every 50 msec
+
+ @param:None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void TPM1_IRQHandler(){
+	end =SysTick->VAL;
+	elapsed=(start-end);
+	profile=(float)elapsed*(float)((float)(1)/(float)(DEFAULT_SYSTEM_CLOCK));
+	if(TPM1_SC & TPM_SC_TOF_MASK)
+	{
+		GPIOB_PTOR|=(1<<18);
+				unsigned long i=0;
+
+		   TPM1_SC|=TPM_SC_TOF_MASK;
+	}
+
+
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief:Initialises TPM module(Peripheral)
+
+  This routines sets the MOD values, prescalar and enables timer interrupt
+
+ @param:None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void TPM_init(){
+
+
+	SIM_SOPT2=0X00000; // Select PLLFLLSEL(16 th bit)
+	SIM_SOPT2 &=0XC000000; //Clock disabled(25 and 24 bit)
+	SIM_SOPT2|=0X1000000; // MCGFLL SELECTED(25 and 24 bit)
+
+	SIM_SCGC6|=0X2000000; //TPM1 selected(bit 25)
+
+	TPM1_SC=0;
+	TPM1_CONF=0;
+
+	TPM1_SC=0X00000004;	//SET PRESCALAR TO 16(last three bits of TPM1_SC)
+	TPM1_SC|=0x00000040; //Enable timer overflow interrupt(bit 6)
+
+	/* Formula: TPM_MOD =(TPM CLOCK SOURCE PERIOD)X(1/PRESCALAR VALUE)X(Required delay)X(TPM_SC_PWM VALUE+1)
+	 *
+	 */
+
+	TPM1_MOD=65534; //SET MODULO REGISTER VALUE AT WHICH OVERFLOW WILL OCCUR(Corresponding to 50 msec delay)
+
+	TPM1_SC|=0X00000008; //INCREMENT ON EVERY CLOCK (BIT 3 AND 4 CMOD FIELD)
+	NVIC->ISER[0]=0X00040000;//SET 18 BIT WHICH IS TPM1 INTERRUPT
+
+}
+/*
+  @brief:IRQ handler for Systick timer operations
+
+  This handler gets invoked when a underflow occurs(transition from 1 to zero)
+
+ @param:None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void SysTick_Handler(){
+
+overflow=overflow+1;
+
+}
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Initialise Systick timer
+
+  Configuring various registers of Systick timer along with its MOD register
+
+ @param:None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void SysTick_init(){
+
+	SysTick->CTRL=0; //Disable Systick
+	/*formula:
+	 * Reload value=(System frequency)/(Required frequency)
+	 */
+	SysTick->LOAD=16777215; // Corresponding to maximum count of 24 bit counter
+	SysTick->VAL=0x00000000;; // Current value=0
+
+}
+
+int main(void)
+{
+TPM_init();
+
+
+/************************************************/
+NVIC->ICPR[0]=0XFFFFFFFF;//CLEAR ANY PENDING INTERRUPTS
+SysTick_init(); //start counting
+SysTick->CTRL=0x7; // Enable interrupt, processor clock,start counting.
+start =SysTick->VAL;
+NVIC->ISPR[0]=(1<<18);//Manually trigger the interrupt
+
+/***********************************************************/
+
+
+
+
+}
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////

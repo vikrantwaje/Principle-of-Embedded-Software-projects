@@ -1,0 +1,10 @@
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stddef.h>
+#define LOCATE_FUNC  __attribute__((__section__(".mysection")))
+
+
+
+
+	uint8_t *ptr=(uint8_t*)&LOCATE_FUNC;
+

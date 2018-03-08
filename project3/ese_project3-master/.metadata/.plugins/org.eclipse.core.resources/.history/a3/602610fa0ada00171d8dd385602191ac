@@ -1,0 +1,310 @@
+/*
+ * Copyright (c) 2015, Freescale Semiconductor, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+ /*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-uart.c
+
+ @brief:This file includes various uart specific operations which are triggered by interrupts
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:26 October 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+
+
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"uart.h"
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Integer to ascii conversion
+
+  Given a integer , convert it into its respective ascii value
+
+ @param: Integer number to be converted, pointer to store the result, base to which the integer is to be converted
+
+
+ @return: Pointer to result
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t *my_itoa(int8_t num,uint8_t *str, uint8_t base)
+{
+    int i =0, l=0;
+    if (num == 0)
+    {
+        *str++ = '0';
+        *str++ = '\0';
+        *str = '\0';
+        return str;
+    }
+    while (num != 0)
+    {
+        int rem = num % base;
+        *str++ = (rem > 9)? (rem-10) + 'a' : rem + '0';
+        num = num/base; l++;
+    }
+    *str = '\0';
+    str=str-(l+1);
+    uint8_t t;
+    i=1; int j=l;
+    while(i<j) // condition for swapping
+    {
+        t= *(str+i);
+        *(str+i)=*(str+j);
+        *(str+j)=t;
+        i++;
+        j--;
+     }
+      return str; //return length(l) of final ascii string.
+ }
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
+ /*
+  @brief: To configure UART
+
+  Configure the UART by setting its appropriate register
+
+ @param: None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void UART_configure()
+{
+	uint16_t baud_divisor;
+	SIM_SCGC4 |= 0x00000400;            // enable clock for UART(10th bit in SCGC5)
+	SIM_SOPT2 |= 0x04000000;            // use FLL output for UART(Bit 27th and 26th)
+	UART0_C2 &= 0XF3;              // Disable transmit and receive pin(Bit 2nd and Bit 3rd of C2)
+	/*---------------------BAUD RATE-----------------------------------------------*/
+
+	/* BAUD RATE=(SYSTEM CLOCK)/((OSR+1)*SBR)
+	 * ASSUME THAT WE WANT BAUD RATE TO 38400
+	 * SYSTEM CLOCK =20.9MHz
+	 * OSR=3
+	 * SBR=312
+	 * BAUD RATE WITH ABOVE VALUES WILL COME OUT TO 38467.5 WHICH IS CLOSE TO OUR REQUIRED BAUD RATE THAT IS 38400
+	 *
+	 */
+	baud_divisor= (uint16_t)(DEFAULT_SYSTEM_CLOCK/(baud *16));// Get the value of SBR to be loaded into BDH and BDL register
+//	UART0_BDH |= (baud_divisor >> 8) & 0x1F; //ANDED with 0x1F because BDH lies from Bit 0 Bit 4
+	//UART0_BDL = (baud_divisor & 0XFF);	//ANDED with 0xFF because BDL lies from bit 0 to bit 7
+	UART0_BDH = 0x00;             // Select BAUD rate as 38400(Bit 0 to bit 4 of BDH)
+	UART0_BDL = 0x22;            // Select BAUD rate as 38400(Bit 0 to Bit 7 of BDL)
+	UART0_C4 = 0x0F;              // Over Sampling Ratio 16(Set OSR to 15)
+	UART0_C1 = 0x00000000;              // Select 8-bit mode
+	UART0_C2 |= 0X2C;              // enable transmit and receive pins(Bit 2nd and Bit 3rd of C2)
+    SIM_SCGC5 |= 0x00000200;            // enable clock for PORTA(Bit 9th in SCGC5)
+    PORTA_PCR1 = 0x00000200;            // Select PTA1 as Receive pin
+    PORTA_PCR2 = 0x00000200;            // Select PTA2 as Transmit pin
+
+
+	/*-----------------------------ENABLING INTERRUPT-------------------------------------*/
+
+	NVIC->ISER[0]=0X00001000;//ENABLE INTERRUPT WHICH IS BIT 12 IN ISER REGISTER(IRQ 12 CORRESPONDS TO UART0 INTERRUPT)*/
+}
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: UART IRQ handler
+
+  Contains transmit and receive interrupt which gets triggered when UART_D register is full or empty
+
+ @param: None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void UART0_IRQHandler()
+{
+	// If UART0_D register gets full,receive interrupt gets activated
+	if((UART0_S1 & 0x20)==0x20)
+	{
+		*pointer=UART0_D;	//Copy value of UART0_D register into a pointer
+		if(*pointer!=0x1B)
+		{
+			CB_buffer_add_item(tx,*pointer);//Add the pointer value into circular buffer
+			//countbackup++;
+			//UART0_C2&=~(0X80);
+		}
+	}
+	//If UART0_D register becomes empty, transmit interrupt gets activated
+	else if((UART0_C2 & 0x80)==0x80)
+	{
+		s1=CB_buffer__buffer_remove_item( rx, receivea);//Remove the value from circular buffer and move it into a pointer
+		if(s1!=empty)
+		{
+			UART0_D=*receivea; //Store the value of pointer into UART0_D register
+			//UART0_D = *loc;
+			UART0_C2 &= 0x7F; //Disable the trasnmit interrupt
+			while(!(UART0_S1 & 0x40)); //Wait until all bits are sent
+
+		}
+	}
+}
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Send a single character from UART_D register to circular buffer
+
+  This basically allows the value entered on putty/teraterm to get added into circular buffer
+
+ @param: pointer to data that is to be sent
+
+
+ @return: status whether transmit interrupt is activated
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t UART_send(uint8_t *poin)
+{
+     uint8_t status;
+    //Send the data into circular buffer
+     {
+    	CB_buffer_add_item(rx,*poin);
+       	UART0_C2 |= 0x00000080;
+       	status = 1;
+     }
+     return status;
+}
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+  @brief: Receives data into memory location from UART0_D
+
+  Given a value to putty/teraterm, it gets loaded into circular buffer from UART0_D if it gets full
+
+ @param: pointer to location where value from UART0_D is to be stored.
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t UART_receive(uint8_t *loc)
+{	//Receive the data from UART0_D register into pointer location
+	if(loc)
+	{
+		*loc = UART0->D;
+	}
+
+}
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+  @brief: Sends  a string of given length
+
+  Given a string of specific length, it gets sent
+
+ @param: Pointer to location which contains the string to be passed and length of the string
+
+
+ @return: Returns status
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t UART_send_n(uint8_t *loc, uint8_t n)
+{
+	uint8_t status;
+	uint8_t *poin=loc;
+	//If pointer is NULL
+	if(loc == NULL)
+	{
+		status = 0;
+	}
+	else
+	{
+		while(n!=0)
+		{//Use UART_send function to send multiple character using while loop
+			UART_send(loc);
+			loc++;
+			n--;
+		}
+	status=0;
+	}
+}
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Send string
+
+  Given a string of data, it usually sends each of character to circular buffer
+
+ @param: pointer to data string which is to be sent
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void UART_send_str(uint8_t *loc)
+{
+	while(*loc)
+	{	//Sends data until NULL character is detected
+		UART_send(loc);
+		loc++;
+	}
+}
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+  @brief: Receive a string from memory location which is stored in UART0_D register
+
+  Given a string, the string is loaded into UART0_D register
+
+ @param: Pointer to location from where string is input, length of string
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+uint8_t UART_receive_n(uint8_t *loc, uint8_t n)
+{
+	if(!loc)
+	{	//Receives multiple character using receive function
+		while(n!=0)
+		{
+				UART_receive(loc);
+				loc++;
+			n--;
+		}
+	}
+}
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////

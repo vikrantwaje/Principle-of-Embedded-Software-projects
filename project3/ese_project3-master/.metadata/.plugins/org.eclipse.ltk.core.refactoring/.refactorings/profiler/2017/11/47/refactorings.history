@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;profiler/Sources/main.c&apos; to &apos;profiler.c&apos;" description="Rename resource &apos;main.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Sources/main.c" name="profiler.c" stamp="1511652120833" updateReferences="true"/>
+</session>

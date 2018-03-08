@@ -1,0 +1,30 @@
+/*
+ * project2.h
+
+ *
+ *  Created on: Oct 29, 2017
+ *      Author: KiranHegde And Vikrant Waje
+ */
+
+/*Guard section*/
+#ifndef INCLUDES_PROJECT2_H_
+#define INCLUDES_PROJECT2_H_
+/*----------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Function declaration */
+/*
+  @brief: This is the main function where all the intialization and
+
+  Configure the UART by setting its appropriate register
+
+ @param: None
+
+
+ @return: None
+ */
+
+void project2();
+
+
+#endif /* INCLUDES_PROJECT2_H_ */

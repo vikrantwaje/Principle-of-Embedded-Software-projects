@@ -1,0 +1,286 @@
+Performing C SOURCE FILE Test WITH_STACK_PROTECTOR failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fc81b/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_fc81b.dir/build.make CMakeFiles/cmTC_fc81b.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fc81b.dir/src.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -DWITH_STACK_PROTECTOR   -fstack-protector -o CMakeFiles/cmTC_fc81b.dir/src.c.o   -c /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp/src.c
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp/src.c: In function ‘main’:
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp/src.c:1:27: error: unused parameter ‘argv’ [-Werror=unused-parameter]
+ int main(int argc, char **argv) { char buffer[256]; return buffer[argc]=0;}
+                           ^~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_fc81b.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_fc81b.dir/src.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_fc81b.dir/src.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_fc81b/fast' failed
+make[2]: *** [cmTC_fc81b/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(int argc, char **argv) { char buffer[256]; return buffer[argc]=0;}
+Determining if the include file io.h exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1aa84/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_1aa84.dir/build.make CMakeFiles/cmTC_1aa84.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1aa84.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE    -o CMakeFiles/cmTC_1aa84.dir/CheckIncludeFile.c.o   -c /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:16: fatal error: io.h: No such file or directory
+ #include <io.h>
+                ^
+compilation terminated.
+CMakeFiles/cmTC_1aa84.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_1aa84.dir/CheckIncludeFile.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_1aa84.dir/CheckIncludeFile.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_1aa84/fast' failed
+make[2]: *** [cmTC_1aa84/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function calloc exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_acac0/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_acac0.dir/build.make CMakeFiles/cmTC_acac0.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_acac0.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=calloc   -o CMakeFiles/cmTC_acac0.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘calloc’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_acac0.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_acac0.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_acac0.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_acac0/fast' failed
+make[2]: *** [cmTC_acac0/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function exit exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_20fca/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_20fca.dir/build.make CMakeFiles/cmTC_20fca.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_20fca.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=exit   -o CMakeFiles/cmTC_20fca.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘exit’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_20fca.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_20fca.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_20fca.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_20fca/fast' failed
+make[2]: *** [cmTC_20fca/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function fprintf exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d085f/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_d085f.dir/build.make CMakeFiles/cmTC_d085f.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d085f.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=fprintf   -o CMakeFiles/cmTC_d085f.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘fprintf’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_d085f.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_d085f.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_d085f.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_d085f/fast' failed
+make[2]: *** [cmTC_d085f/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function free exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_2e122/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_2e122.dir/build.make CMakeFiles/cmTC_2e122.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2e122.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=free   -o CMakeFiles/cmTC_2e122.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘free’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_2e122.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_2e122.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_2e122.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_2e122/fast' failed
+make[2]: *** [cmTC_2e122/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function malloc exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4dea8/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_4dea8.dir/build.make CMakeFiles/cmTC_4dea8.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4dea8.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=malloc   -o CMakeFiles/cmTC_4dea8.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘malloc’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_4dea8.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_4dea8.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_4dea8.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_4dea8/fast' failed
+make[2]: *** [cmTC_4dea8/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function memcpy exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3d08a/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_3d08a.dir/build.make CMakeFiles/cmTC_3d08a.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3d08a.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=memcpy   -o CMakeFiles/cmTC_3d08a.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘memcpy’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_3d08a.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_3d08a.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_3d08a.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_3d08a/fast' failed
+make[2]: *** [cmTC_3d08a/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function memset exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7d2b2/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_7d2b2.dir/build.make CMakeFiles/cmTC_7d2b2.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7d2b2.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=memset   -o CMakeFiles/cmTC_7d2b2.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘memset’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_7d2b2.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_7d2b2.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_7d2b2.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_7d2b2/fast' failed
+make[2]: *** [cmTC_7d2b2/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function printf exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c33b1/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_c33b1.dir/build.make CMakeFiles/cmTC_c33b1.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c33b1.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=printf   -o CMakeFiles/cmTC_c33b1.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘printf’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_c33b1.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_c33b1.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_c33b1.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_c33b1/fast' failed
+make[2]: *** [cmTC_c33b1/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function strcmp exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3ac33/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_3ac33.dir/build.make CMakeFiles/cmTC_3ac33.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3ac33.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=strcmp   -o CMakeFiles/cmTC_3ac33.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘strcmp’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_3ac33.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_3ac33.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_3ac33.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_3ac33/fast' failed
+make[2]: *** [cmTC_3ac33/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function sprintf exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5e725/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_5e725.dir/build.make CMakeFiles/cmTC_5e725.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5e725.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=sprintf   -o CMakeFiles/cmTC_5e725.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘sprintf’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_5e725.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_5e725.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_5e725.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_5e725/fast' failed
+make[2]: *** [cmTC_5e725/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+
+Determining if the function vsnprintf exists failed with the following output:
+Change Dir: /home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_110a7/fast"
+make[2]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_110a7.dir/build.make CMakeFiles/cmTC_110a7.dir/build
+make[3]: Entering directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_110a7.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -std=c99 -Wall -Werror -g -O0 -I 3rd-party/build-Debug/include -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -Wundef -fPIC -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DCHECK_FUNCTION_EXISTS=vsnprintf   -o CMakeFiles/cmTC_110a7.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.7/Modules/CheckFunctionExists.c
+<command-line>:0:23: error: conflicting types for built-in function ‘vsnprintf’ [-Werror]
+/usr/share/cmake-3.7/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ‘CHECK_FUNCTION_EXISTS’
+   CHECK_FUNCTION_EXISTS();
+   ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+CMakeFiles/cmTC_110a7.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_110a7.dir/CheckFunctionExists.c.o' failed
+make[3]: *** [CMakeFiles/cmTC_110a7.dir/CheckFunctionExists.c.o] Error 1
+make[3]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_110a7/fast' failed
+make[2]: *** [cmTC_110a7/fast] Error 2
+make[2]: Leaving directory '/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/cmocka/CMakeFiles/CMakeTmp'
+
+

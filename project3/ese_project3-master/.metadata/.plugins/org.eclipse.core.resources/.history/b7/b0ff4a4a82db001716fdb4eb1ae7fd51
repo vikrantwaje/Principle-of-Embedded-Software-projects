@@ -1,0 +1,105 @@
+
+/*--------------------------------------------------------------------------------------------------------------------------------
+
+  @file-project2.c
+
+ @brief:This file intilises all the buffers, generates buffer report and
+ 	 	- takes care of displaying required elements through UART.
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:29 October 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"uart.h"
+#include"cb.h"
+#include "project2.h"
+#include<string.h>
+#include"profiler.h"
+
+
+/*---------------------------------------------------------------------------------------------------------------------*/
+/* Global declaration */
+//uint32_t end,elapsed;
+//uint8_t overflow;
+uint8_t ki;
+uint8_t *pointer=&ki;
+CB_t *tx;
+CB_t *rx;
+uint8_t  *loc;
+uint8_t c;
+uint8_t f;
+uint8_t alphacount=0;
+uint8_t numericcount=0, punctuationcount=0;
+uint8_t count=0;
+uint8_t b;
+uint8_t *receive=&b;
+uint8_t s1=10;
+uint8_t s2=10;
+uint8_t e;
+uint8_t *receivea=&e;
+
+
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Calls various LOGGING FUNCTION
+
+  Calling the logs to test its functionality on putty
+
+ @param:None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void project2()
+{
+	uint8_t l;
+	RTC_init();
+	tx=malloc(sizeof(CB_t));
+	rx=malloc(sizeof(CB_t));
+
+	CB_init(tx,500);					/*Initialing the circular buffer for storing character*/
+	CB_init(rx,20);					/*Initialising the buffer for transmitting character to terminal*/
+
+	UART_configure();				/* Configuring UART*/
+	//for(l=0;l<255;l++);
+	GPIO_INITIALIZATION();
+	SysTick_init();
+	SYSTEM_INITIALISED();
+
+					//end =SysTick->VAL;
+					//elapsed=overflow*(SysTick->LOAD)+((SysTick->LOAD)-end);
+					PROFILING_COMPLETED();
+					//Sy_sTick->CTRL=0;
+					uint8_t k=0;
+					for(k=0;k<129;k++);
+					PROFILING_RESULT();
+					while(1){
+						//if(!count)
+	while(count<30);
+	DATA_ANALYSIS_STARTED();
+		DATA_PUNCTUATION_COUNT();
+			DATA_ALPHA_COUNT();
+			DATA_NUMERIC_COUNT();
+		DATA_ANALYSIS_COMPLETED();
+	log_flush();
+	count=0;
+
+}
+}
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////

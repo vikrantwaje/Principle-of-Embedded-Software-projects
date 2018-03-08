@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/cmocka/example/allocate_module.c
+config.h
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/cmocka/example/config.h
+malloc.h
+-
+sys/types.h
+-
+stdlib.h
+-
+
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/cmocka/example/allocate_module_test.c
+stdarg.h
+-
+stddef.h
+-
+setjmp.h
+-
+cmocka.h
+-
+
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/cmocka/include/cmocka.h
+
+config.h
+

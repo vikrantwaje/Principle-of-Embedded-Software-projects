@@ -1,0 +1,111 @@
+/*
+ * Copyright (c) 2015, Freescale Semiconductor, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "MKL25Z4.h"
+
+uint8_t hours=0;
+uint8_t minutes=0;
+uint8_t seconds;
+void RTC_Seconds_IRQHandler(){
+	//uint8_t minutes,hours;
+
+	 seconds=RTC_TSR;
+	if(seconds>59){
+		minutes=minutes+1;
+		RTC_SR=0;//RTC disabled
+		RTC_TSR=0;//Count brought back to zero
+		seconds=0;//seconds should be reset
+		RTC_SR|=0x00000010;//RTC enabled again(Bit 4)
+	}
+	if(minutes>59){
+		minutes=0;
+		hours=hours+1;
+
+	}
+
+}
+
+void RTC_init(){
+			SIM_SCGC5|=(1<<11);//Enable clock to PORTC(We are shorting PC3 and PC1)
+			MCG_C1 |= (1<<1); //Enable internal reference clock(Bit 1=1)
+			MCG_C2 &= ~(1<<0);  //Internal Reference Clock -->Slow(Bit 0=0)
+
+			//**RTC_CLKIN**//
+			PORTC_PCR1 |= (1<<8);       //PTC1 as RTC_CLKIN(Bit 8)
+			SIM_SOPT1 |= (1<<19);  //32 Khz clock source for RTC(bit19=1,bit 18=0)
+
+			SIM_SOPT1&=~(1<<18);
+
+			//**32KHz Frequency**//
+			//Clockout pin --> 32 KHz(BIT 7,BIT6,BIT 5 SHOULD BE 100)
+			SIM_SOPT2 |= (1<<7);
+			SIM_SOPT2 &= ~(1<<6);
+			SIM_SOPT2 &= ~(1<<5);
+
+			//PTC3 as CLKOUT(BIT10,BIT9,BIT8 SHOULD BE 101)
+
+			PORTC_PCR3 |= (1<<10)|(1<<8);
+			PORTC_PCR3&=~(1<<9);
+
+		    /*enable the clock to SRTC module register space*/
+			SIM_SCGC6 |= (1<<29);//(BIT 29=1)
+
+			/*Clear Registers*/
+		    RTC_CR  = (1<<0);//Software reset
+		    RTC_CR  &= ~(1<<0);
+
+		    //Checking for time invalid flag(Bit 1)
+		    if (RTC_SR & 0X00000001){
+		        RTC_TSR = 0x00000000;   //  this action clears the TIF
+		    }
+
+		    /*Set time compensation parameters*/
+		   // RTC_TCR = RTC_TCR_CIR(1) | RTC_TCR_TCR(0xFF);
+
+
+
+		    /*Enable Seconds Interrupt*/
+		    RTC_IER |= (1<<4); //Seconds interrupt enable(Bit4=1)
+
+		    /*Timer enable*/
+		    RTC_SR |= (1<<4);//Time count enable(Bit 4=1)
+
+		    /*Configure the timer seconds and alarm registers*/
+		  //  RTC_TSR = 0xFF;
+
+NVIC->ISER[0]=0X00200000;//ENABLE NVIC FOR TIMER INTERRUPT(BIT 21)
+
+
+}
+void main(){
+
+	RTC_init();
+	while(1);
+}

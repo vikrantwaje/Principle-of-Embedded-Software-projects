@@ -1,0 +1,108 @@
+ /*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-project2.c
+
+ @brief:This file intilises all the buffers and takes care of displaying required elements through UART.
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:29 October 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"uart.h"
+#include"cb.h"
+#include "project2.h"
+
+uint8_t ki;
+uint8_t *pointer=&ki;
+CB_t *tx;
+CB_t *rx;
+uint8_t  *loc;
+uint8_t c;
+uint8_t f;
+uint8_t alphacount=0;
+uint8_t numericcount=0;
+uint8_t count=0;
+uint8_t b;
+uint8_t *receive=&b;
+uint8_t s1=10;
+uint8_t s2=10;
+uint8_t e;
+uint8_t *receivea=&e;
+
+
+void project2()
+{
+	tx=malloc(sizeof(CB_t));
+	rx=malloc(sizeof(CB_t));
+	CB_init(tx,18);
+	CB_init(rx,9);
+	UART_configure();
+	UART_send_n("\n\r",2);
+	UART_send_n("\n\rHello", 7);
+	while(1)
+	{
+		if(*pointer==0x1B)
+		{
+			*pointer='\0';
+			int numb=10;
+			UART_send_n("\n\r", 2);
+			volatile uint8_t countbackup = tx->count;
+			//UART_send_n("hello \n\r", 8);
+			while(countbackup!=0)
+			{
+				s2=CB_buffer__buffer_remove_item( tx, receive);
+				//if(s2!=empty)
+				if((*receive>=0x41 && *receive <=0x5A)||(*receive>=0x61 && *receive<=0x7A))
+				{
+					alphacount++;
+					count++;
+				}
+				else if(*receive>=0x30 && *receive <=0x39)
+				{
+					numericcount++;
+					count++;
+				}
+				else
+				{
+					count++;
+				}
+				countbackup--;
+			}
+
+			uint8_t *n=&f;
+			my_itoa(alphacount, n, 10);
+			UART_send_n("ALPHABETIC COUNT IS\t",20);
+			UART_send_str(&f);
+			UART_send_n("\n\r",2);
+			my_itoa(numericcount, n, 10);
+			UART_send_n("NUMERIC COUNT IS\t",17);
+			UART_send_str(&f);
+			UART_send_n("\n\r",2);
+			uint8_t othercount = (count-(alphacounr+numericcount));
+			my_itoa(othercount, n, 10);
+			UART_send_n("OTHER COUNT IS\t\t",16);
+			UART_send_str(&f);
+			UART_send_n("\n\r",2);
+			my_itoa(count, n, 10);
+			UART_send_n("TOTAL COUNT IS\t\t",16);
+			UART_send_str(&f);
+			UART_send_n("\n\r",2);
+			UART_send_n("Done",4);
+			UART_send_n("\n\r",2);
+			alphacount=0;
+			numericcount=0;
+			count=0;
+		}
+	}
+}

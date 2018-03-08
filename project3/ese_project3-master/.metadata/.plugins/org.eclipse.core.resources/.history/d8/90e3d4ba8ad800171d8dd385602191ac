@@ -1,0 +1,165 @@
+/*
+ * Copyright (c) 2015, Freescale Semiconductor, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+  @file-spi.c
+ @brief:This file includes various SPI operations
+ @author: Vikrant Waje and Kiran Hegde
+ @date:23 November 2017
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+
+#include "MKL25Z4.h"
+#include<stddef.h>
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Initialise SPI module
+  Configuring various registers of SPI module
+ @param:None
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void SPI_init(){
+
+SIM_SCGC5|=0X00000800;// Enable clock to PORTC which has multiplexed SPI pins(Bit 12)
+SIM_SCGC4|=0X00400000; //Enable clock to SPI0 module(Bit 22)
+
+PORTC_PCR11=0X00000100;
+PORTC_PCR4=0X00000100; //Chip select(Bit 8-10)
+PORTC_PCR5=0x00000200;//SCK(Bit 8-10)
+PORTC_PCR6=0x00000500;//MISO(Bit 8-10)
+PORTC_PCR7=0x00000500;//M0SI(Bit 8-10)
+
+SPI0_C1=(1<<4); //Enable master mode
+SPI0_C2=0x00; //Enable MODFEN  bit which determines slave function
+
+SPI0_BR = (SPI_BR_SPPR(0x00) | SPI_BR_SPR(0x01)); //Baud rate
+SPI0_C1|=(1<<6);//Enable spi
+}
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Reads a single character from SPI0_D register
+  This basically reads a given byte from SPI0_D register
+ @param: Variable into which value is to be read
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+uint8_t SPI_read_byte(uint8_t byte){
+
+	while((SPI0_S & 0x80) !=(0x80));
+
+	byte=SPI0_D;
+	return(byte);
+}
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Send a single character into SPI0_D register
+  This basically transfers a given byte into SPI0_D register
+ @param: Value that is to be sent
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void SPI_write_byte(uint8_t byte){
+	while((SPI0_S & 0x20) !=(0x20));
+
+
+	SPI0_D=byte;
+
+}
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Send a given packet using SPI0_D register
+  This basically transfers a given packet via SPI0_D register
+ @param: Values that are to be sent, length of packet
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void SPI_send_packet(uint8_t *ptr,size_t length){
+	while(length<0){
+		while(SPI0_S & 0x20 !=(0x20));
+		SPI0_D=*ptr;
+		ptr++;
+		length--;
+
+
+	}
+
+}
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Flush the SPI0_S register
+  This basically waits until the SPI0_D register getts empty
+ @param: None
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void SPI_flush(){
+	while(SPI0_S & 0x20 !=(0x20));
+
+}
+void SPI_read_5byte(uint8_t *addr){
+	while((SPI0_S & 0x80) !=(0x80));
+
+}
+
+void main(){
+	SIM->SCGC5|=(1<<11);
+			PORTC->PCR[11]|=(1<<8);
+			GPIOC_PDDR|=(1<<11);
+			GPIOC_PSOR|=(1<<11);
+	SPI_init();
+
+
+
+uint8_t temp;
+uint8_t r,r1,r2;
+	//Make CSN low
+	/*nrf_chip_enable();
+	//Send command byte
+	SPI_write_byte(0x30);
+    SPI_read_byte(r1);
+	SPI_write_byte(0xFF);
+	SPI_read_byte(r2);
+	nrf_chip_disable();*/
+
+//nrf_write_config(0x08);
+nrf_write_rf_ch(0x89);
+	temp=nrf_read_rf_ch();
+
+
+
+
+while(1);
+
+}

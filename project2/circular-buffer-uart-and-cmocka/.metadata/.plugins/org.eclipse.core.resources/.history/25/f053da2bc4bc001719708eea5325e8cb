@@ -1,0 +1,38 @@
+/*
+ * project2.h
+
+ *
+ *  Created on: Oct 29, 2017
+ *      Author: KiranHegde And Vikrant Waje
+ */
+
+/*Guard section*/
+#ifndef INCLUDES_PROJECT2_H_
+#define INCLUDES_PROJECT2_H_
+/*----------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
+#include <stdint.h>
+#include "cb.h"
+
+uint8_t ki;
+uint8_t *pointer=&ki;
+CB_t *tx;
+CB_t *rx;
+uint8_t  *loc;
+uint8_t c;
+uint8_t f;
+uint8_t alphacount=0;
+uint8_t numericcount=0;
+uint8_t count=0;
+uint8_t b;
+uint8_t *receive=&b;
+uint8_t s1=10;
+uint8_t s2=10;
+uint8_t e;
+uint8_t *receivea=&e;
+
+/* Function declaration */
+void project2();
+
+
+#endif /* INCLUDES_PROJECT2_H_ */

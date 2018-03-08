@@ -1,0 +1,14 @@
+/*
+ * main.c
+ *
+ *  Created on: Oct 29, 2017
+ *      Author: KiranHegde
+ */
+
+
+#include "project2.h"
+
+void main()
+{
+	project2();
+}

@@ -1,0 +1,9 @@
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stddef.h>
+
+void main(){
+
+	extern uint32_t BUFFER;
+	uint8_t *ptr=(uint8_t*)&BUFFER_start;
+}

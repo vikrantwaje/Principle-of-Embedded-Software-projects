@@ -1,0 +1,80 @@
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-dma.h
+
+ @brief:This file includes various dma specific operations like memmove,memset,memzero
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:20 November 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+/*Guard section*/
+
+#ifndef INCLUDES_DMA_H_
+#define INCLUDES_DMA_H_
+
+/*Function declaration*/
+/*
+  @brief: Use DMA to move block of memory locations
+
+  The memory copy must be such that it must handle overlap
+
+ @param: source pointer, destination pointer, length of memory block that is to be moved
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void my_memmove(uint8_t *src,uint8_t *dst,uint8_t length);
+/*------------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+  @brief: To set given memory location with a specific value using DMA
+
+  Using DMA, set a given value to memory location
+
+ @param: value that is to used to set memory location
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void mem_set(uint8_t value);
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: To reset memory locations
+
+  Given a set of memory location, reset all their values
+
+ @param: None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void mem_zero();
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief:IRQ handler for DMA operations
+
+  When the specified  block of memory is being transfered, this IRQ handler gets invoked
+
+ @param:None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void DMA0_IRQHandler();
+
+#endif /* INCLUDES_DMA_H_ */

@@ -1,0 +1,31 @@
+11:33:34 **** Incremental Build of configuration Debug for project vikrant ****
+make all 
+Building file: ../Sources/cb.c
+Invoking: Cross ARM C Compiler
+arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections  -g3 -I"C:/Users/kiran/Documents/Homeworks/project2_ese/vikrant/Static_Code/PDD" -I"C:/Users/kiran/Documents/Homeworks/project2_ese/vikrant/Static_Code/IO_Map" -I"C:/Users/kiran/Documents/Homeworks/project2_ese/vikrant/Sources" -I"C:/Users/kiran/Documents/Homeworks/project2_ese/vikrant/Generated_Code" -std=c99 -MMD -MP -MF"Sources/cb.d" -MT"Sources/cb.o" -c -o "Sources/cb.o" "../Sources/cb.c"
+../Sources/cb.c:66:11: error: conflicting types for 'CB_init'
+ CB_status CB_init(CB_t *ptr,uint32_t length)
+           ^
+In file included from ../Sources/cb.c:54:0:
+C:/Users/kiran/Documents/Homeworks/project2_ese/vikrant/Generated_Code/cb.h:39:11: note: previous declaration of 'CB_init' was here
+ CB_status CB_init(CB_t *ptr,uint8_t length);
+           ^
+../Sources/cb.c:157:11: error: conflicting types for 'CB_buffer_add_item'
+ CB_status CB_buffer_add_item(CB_t *ptr,uint32_t data)
+           ^
+In file included from ../Sources/cb.c:54:0:
+C:/Users/kiran/Documents/Homeworks/project2_ese/vikrant/Generated_Code/cb.h:92:11: note: previous declaration of 'CB_buffer_add_item' was here
+ CB_status CB_buffer_add_item(CB_t *ptr,uint8_t data);
+           ^
+../Sources/cb.c:182:9: error: conflicting types for 'CB_buffer__buffer_remove_item'
+ uint8_t CB_buffer__buffer_remove_item(CB_t *ptr,uint32_t temp)
+         ^
+In file included from ../Sources/cb.c:54:0:
+C:/Users/kiran/Documents/Homeworks/project2_ese/vikrant/Generated_Code/cb.h:105:9: note: previous declaration of 'CB_buffer__buffer_remove_item' was here
+ uint8_t CB_buffer__buffer_remove_item(CB_t *ptr,uint8_t temp);
+         ^
+Sources/subdir.mk:27: recipe for target 'Sources/cb.o' failed
+make: *** [Sources/cb.o] Error 1
+
+11:33:35 Build Finished (took 884ms)
+

@@ -1,0 +1,9 @@
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/lib/pkgconfig/cmocka.pc
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/lib/cmake/cmocka/cmocka-config.cmake
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/lib/cmake/cmocka/cmocka-config-version.cmake
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/include/cmocka.h
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/include/cmocka_pbc.h
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/lib/libcmocka.so.0.4.0
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/lib/libcmocka.so.0
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/lib/libcmocka.so
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/build-Debug/lib/libcmocka.a

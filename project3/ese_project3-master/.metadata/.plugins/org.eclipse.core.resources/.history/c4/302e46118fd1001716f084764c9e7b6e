@@ -1,0 +1,149 @@
+/*
+ /*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-project2.c
+
+ @brief:This file intilises all the buffers, generates buffer report and
+ 	 	- takes care of displaying required elements through UART.
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:29 October 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"uart.h"
+#include"cb.h"
+#include "project2.h"
+
+/*---------------------------------------------------------------------------------------------------------------------*/
+/* Global declaration */
+uint8_t ki;
+uint8_t *pointer=&ki;
+CB_t *tx;
+CB_t *rx;
+LB_t *ls;
+uint8_t  *loc;
+uint8_t c;
+uint8_t f;
+uint8_t alphacount=0;
+uint8_t numericcount=0;
+uint8_t count=0;
+uint8_t b;
+uint8_t *receive=&b;
+uint8_t s1=10;
+uint8_t s2=10;
+uint8_t e;
+uint8_t *receivea=&e;
+uint8_t x;
+void print(){
+	log_string("CB initialiseation");
+	x=0;
+}
+/*---------------------------------------------------------------------------------------------------------------------*/
+#define CLOCK_SETUP 1 // Select clock frequency as 48 MHZ
+
+void TPM1_IRQHandler(){
+	if(TPM1_SC & TPM_SC_TOF_MASK)
+	{
+		GPIOB_PTOR|=(1<<19);
+				unsigned long i=0;
+
+		   TPM1_SC|=TPM_SC_TOF_MASK;
+	}
+
+
+}
+
+
+void led_init(){
+
+	 SIM->SCGC5|=(1<<10);
+	PORTB->PCR[19]|=(1<<8);
+	GPIOB_PDDR|=(1<<19);
+
+}
+
+
+void TPM_init(){
+
+
+	SIM_SOPT2=0X10000; // Select PLLFLLSEL(16 th bit)
+	SIM_SOPT2 &=0XC000000; //Clock disabled(25 and 24 bit)
+	SIM_SOPT2|=0X1000000; // PLL/2 is selected(25 and 24 bit)
+
+	SIM_SCGC6|=0X2000000; //TPM1 selected(bit 25)
+
+	TPM1_SC=0;
+	TPM1_CONF=0;
+
+	TPM1_SC=0X00000005;	//Set prescaler to 32(last three bits of TPM1_SC)
+	TPM1_SC|=0x00000040; //Enable timer overflow interrupt(bit 6)
+
+	/* Formula: Required delay =(Modulo register +1)X(1/Clock frequency for timer module)
+	 *
+	 */
+
+	TPM1_MOD=37499; //SET MODULO REGISTER VALUE AT WHICH OVERFLOW WILL OCCUR(Corresponding to 50 msec delay)
+
+	TPM1_SC|=0X00000008; //iNCREMENT ON EVERY CLOCK (BIT 3 AND 4 CMOD FIELD)
+	NVIC->ISER[0]=0X00040000;//SET 18 BIT WHICH IS TPM1 INTERRUPT
+
+
+
+}
+
+
+
+/* Function declaration */
+/*
+  @brief: Calling of all initialise function and displaying the report
+
+  This function calls all the initialization functions and takes care of displaying the required
+  elements on the serial terminal
+
+ @param: None
+
+ @return: None
+ */
+
+/*----------------------------------------------------------------------------------------------------------------------------*/
+void project2()
+{
+	tx=malloc(sizeof(CB_t));
+	rx=malloc(sizeof(CB_t));
+	ls=malloc(sizeof(LB_t));
+	CB_init(tx,18);					/*Initialing the circular buffer for storing character*/
+	CB_init(rx,9);					/*Initialising the buffer for transmitting character to terminal*/
+
+	UART_configure();				/* Configuring UART*/
+
+	LB_init(ls,13);
+	SystemCoreClockUpdate();
+	led_init();
+	TPM_init();
+	log_integer(1);
+		log_string("\t");
+		log_string("System initialised");
+	//	x=1;
+	//LB_init(lb,78);
+
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+

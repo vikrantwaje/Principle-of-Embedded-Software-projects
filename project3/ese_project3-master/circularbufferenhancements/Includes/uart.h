@@ -1,0 +1,166 @@
+ /*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-uart.h
+
+ @brief:This file includes various uart specific operations which are triggered by interrupts
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:26 October 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+/*Guard section*/
+
+#ifndef INCLUDES_UART_H_
+#define INCLUDES_UART_H_
+/*----------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
+#include "cb.h"
+#define baud 38400//Set baud rate to 38400
+#define END_CRITICAL() __enable_irq();
+#define START_CRITICAL()   __disable_irq();
+/*-------------------------------------------------------------------------------------------------*/
+/* Global declaration. Variables are used both in project2.c and uart.c */
+
+extern uint8_t ki;
+extern uint8_t *pointer;
+extern CB_t *Logger_q;
+extern CB_t *rx;
+extern uint8_t  *loc;
+extern uint8_t c;
+extern uint8_t f;
+extern uint8_t alphacount;
+extern uint8_t numericcount;
+extern uint8_t count;
+extern uint8_t b;
+extern uint8_t *receive;
+extern uint8_t s1;
+extern uint8_t s2;
+extern uint8_t e;
+extern uint8_t *receivea;
+/*----------------------------------------------------------------------------------------------------------*/
+
+/*Function declaration*/
+/*
+  @brief: To configure UART
+
+  Configure the UART by setting its appropriate register
+
+ @param: None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void UART_configure();
+
+
+/*--------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Send a single character from UART_D register to circular buffer
+
+  This basically allows the value entered on putty/teraterm to get added into circular buffer
+
+ @param: pointer to data that is to be sent
+
+
+ @return: status whether transmit interrupt is activated
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t UART_send(uint8_t *poin);
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+  @brief: Sends  a string of given length
+
+  Given a string of specific length, it gets sent
+
+ @param: Pointer to location which contains the string to be passed and length of the string
+
+
+ @return: Returns status
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t UART_send_n(uint8_t *loc, uint8_t n);
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+  @brief: Receives data into memory location from UART0_D
+
+  Given a value to putty/teraterm, it gets loaded into circular buffer from UART0_D if it gets full
+
+ @param: pointer to location where value from UART0_D is to be stored.
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t UART_receive(uint8_t *loc);
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+  @brief: Receive a string from memory location which is stored in UART0_D register
+
+  Given a string, the string is loaded into UART0_D register
+
+ @param: Pointer to location from where string is input, length of string
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t UART_receive_n(uint8_t *loc, uint8_t n);
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Send string
+
+  Given a string of data, it usually sends each of character to circular buffer
+
+ @param: pointer to data string which is to be sent
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void UART_send_str(uint8_t *loc);
+
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Integer to ascii conversion
+
+  Given a integer , convert it into its respective ascii value
+
+ @param: Integer number to be converted, pointer to store the result, base to which the integer is to be converted
+
+
+ @return: Pointer to result
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t *my_itoa(int8_t num,uint8_t *str, uint8_t base);
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: UART IRQ handler
+
+  Contains transmit and receive interrupt which gets triggered when UART_D register is full or empty
+
+ @param: None
+
+
+ @return: None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void UART0_IRQHandler();
+
+void LED_init();
+void LOGGER_INITIALISED();
+
+
+
+
+
+#endif /* INCLUDES_UART_H_ */

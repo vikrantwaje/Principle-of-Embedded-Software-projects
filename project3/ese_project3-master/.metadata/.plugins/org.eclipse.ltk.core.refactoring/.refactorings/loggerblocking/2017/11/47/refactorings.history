@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;loggerblocking/Sources/main.c&apos; to &apos;uart.c&apos;" description="Rename resource &apos;main.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Sources/main.c" name="uart.c" stamp="1511399260758" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;loggerblocking/Includes/oroject2.h&apos; to &apos;project2.h&apos;" description="Rename resource &apos;oroject2.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Includes/oroject2.h" name="project2.h" stamp="1511399594988" updateReferences="true"/>
+</session>

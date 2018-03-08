@@ -1,0 +1,12 @@
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stddef.h>
+
+
+
+	void main(){
+
+
+		__attribute__ ((section(".myBuffer"))) unsigned char myBuffer[1024] ;
+	}
+

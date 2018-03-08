@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/cmocka/example/database.h
+
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/cmocka/example/product_database.c
+database.h
+-
+
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/cmocka/example/product_database_test.c
+stdarg.h
+-
+stddef.h
+-
+setjmp.h
+-
+cmocka.h
+-
+database.h
+-
+
+/home/vikrant/Desktop/project2clone/ecen5013/tutorials/unit_tests/3rd-party/cmocka/include/cmocka.h
+

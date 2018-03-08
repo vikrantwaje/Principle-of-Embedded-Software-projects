@@ -1,0 +1,361 @@
+/*
+ * Copyright (c) 2015, Freescale Semiconductor, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-Cb.c
+
+ @brief:This file includes various circular buffer operation like additem,removeitem,peek,destroy,isbufferfull,isbufferempty
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:21 October 2017
+
+
+ */
+
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*1. Preprocessor Directives*/
+
+#include "MKL25Z4.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include<stdint.h>
+#include "cb.h"
+#include"uart.h"
+/*------------------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Initialises the Circular Buffer.
+
+  Given a circular buffer, this will initialize the head pointer,tail pointercount and length.
+
+ @param: Pointer to circular buffer
+ @param:length of buffer
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+CB_status CB_init(CB_t *ptr,uint32_t length)
+{
+    ptr->buffptr=malloc((length)*sizeof(uint8_t));
+	//Checks for Null pointer
+    if(ptr->buffptr==NULL){
+    	return(null);
+
+    }
+    else{
+		//Initialises head,tail,count and length of circular buffer.
+    ptr->head=ptr->buffptr;
+    ptr->tail=ptr->buffptr;
+    ptr->count=0;
+    ptr->length=length;
+    }
+
+    return(empty);
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Checks Whether the Circular Buffer is full.
+
+  Given a pointer to circular buffer, this will check whether circular buffer is full.
+
+ @param: Pointer to circular buffer
+
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+CB_status CB_is_full(CB_t *ptr)
+{
+
+	//Checks for Null pointer
+    if(ptr->buffptr==NULL){
+    	return(null);
+
+    }
+	// Check Whether circular buffer is full
+    if(ptr->count==ptr->length)
+    {
+        return(full);
+    }
+    else{
+return(stillspace);
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Check Whether the Circular Buffer is empty.
+
+  Given a circular buffer, this will check Whether circular buffer is empty.
+
+ @param: Pointer to circular buffer
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+CB_status CB_is_empty(CB_t *ptr)
+{
+	//Checks for Null pointer
+    if(ptr->buffptr==NULL){
+    	return(null);
+
+    }
+	//Check whether circular buffer is empty
+    if(ptr->count==0)
+    {
+        return(empty);
+
+    }
+    else{
+    	return(stillspace);
+    };
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Destroys the circular buffer.
+
+  Given a pointer to circular buffer, this function will destroy the circular buffer.
+
+ @param: Pointer to circular buffer
+
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+
+CB_status CB_destroy(CB_t *ptr)
+{
+	//Frees the heap space reserved by circular buffer
+    free(ptr->buffptr);
+    return(destroyed);
+
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Adds item to Circular Buffer.
+
+  Given a circular buffer, this will add item to the location pointed by head pointer.
+
+ @param: Pointer to circular buffer
+ @param:Data to be inserted at the head pointer location
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+CB_status CB_buffer_add_item(CB_t *ptr,uint8_t data)
+{
+
+	//Checks for Null pointer
+    if(ptr->buffptr==NULL){
+    	return(null);
+
+    }
+    CB_status s1=CB_is_full(ptr);
+    if(s1==full){	//If circular buffer is full dont add items in it
+    	return(full);
+    }
+    else{
+	*(ptr->head)=data;	//If circular buffer is not full,add items into it
+   // printf("\nvalue at %p is %d\n ",(ptr->head),*(ptr->head));
+    ptr->count=ptr->count+1;	//Increment the count after data has been added into circular buffer
+    if(ptr->head==ptr->buffptr+ptr->length-1){
+		// If head reaches end of buffer,wrap around
+        ptr->head=ptr->buffptr;
+    }
+    else{
+		//If head does not reaches end of buffer, simply increment the head pointer
+        ptr->head=ptr->head+1;
+        return(success);
+    }
+    }
+
+}
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Removes item from the circular buffer.
+
+  Given a circular buffer, this will remove the item from location pointed out by tail pointer.
+
+ @param: Pointer to circular buffer
+ @param:Variable in which data that is removed is stored.
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+CB_status CB_buffer__buffer_remove_item(CB_t *ptr,uint8_t *temp)
+{
+
+	//Checks for Null pointer
+    if(ptr->buffptr==NULL){
+    	return(null);
+
+    }
+		//If circular buffer is empty, dont remove any items from circular buffer
+	CB_status s1=CB_is_empty(ptr);
+	if(s1==empty){
+		return(empty);
+	}
+	else{
+		//If circular buffer is not empty,load the value at tail into a temporary variable
+*temp=*(ptr->tail);
+//Make the value at tail zero after removing the data
+*(ptr->tail)=0;
+// Decrement the count after data has been removed from tail pointer
+ptr->count=ptr->count-1;
+if(ptr->tail==ptr->buffptr+ptr->length-1){
+	//If tail pointer reaches end of buffer, simply wrap around
+    ptr->tail=ptr->buffptr;
+}
+else{
+	//If tail pointer has not reached end of buffer, simply increment the tail pointer
+    ptr->tail=ptr->tail+1;
+}
+	}
+
+}
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Peeks data in circular buffer.
+
+  Given a circular buffer, this will peek data in position which is passed as parameter to this function.
+
+ @param: Pointer to circular buffer
+ @param:Position to peek into.
+ @param:Pointer in which the peeked data is stored.
+
+ @return: Status of buffer(full,empty,null,success,failure).
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+CB_status CB_peek(CB_t *ptr,uint8_t position,uint8_t *temp)
+{
+	//Checks for Null pointer
+    if(ptr->buffptr==NULL){
+    	return(null);
+
+    }
+// Checks whether the given position is within the bound of circular buffer
+    if(position<=ptr->length)
+    {
+        //printf("head pointer=%p head value=%d\n",ptr->head+position,*(ptr->head+position));
+		//If value is within bound, peek the value at that position
+        temp=ptr->head+position;
+       // printf("temp pointer=%p temp value=%d\n",temp,*(temp));
+       // printf("The value that is peeked is %d\n",*temp);
+        return(success);
+
+    }
+    else
+    {
+		//If the position is not within bound of buffer, return out of bound.
+        return(outofbound);
+    }
+
+
+}
+
+void DATA_ANALYZE()
+{
+	CB_status te;
+	uint8_t i=0;
+	uint8_t temporary;
+	uint8_t *tempo=&temporary;
+	for(i=0; i<=10; i++)
+	{
+		te=CB_buffer__buffer_remove_item(rx, tempo);
+		if(te!=empty)
+		{
+				if((*tempo>=0x41 && *tempo <=0x5A)||(*tempo>=0x61 && *tempo<=0x7A))  /*check if alphabet*/
+				{
+					alphacount++;
+					count++;
+				}
+				else if(*tempo>=0x30 && *tempo <=0x39)			/*check if its a number*/
+				{
+					numericcount++;
+					count++;
+				}
+				else if((*tempo>=0x21 && *tempo<=0x2F) || (*tempo>=0x3A && *tempo<=0x3F))
+				{
+					punctuationcount++;
+					count++;
+				}
+				else
+				{
+					count++;										/*total count*/
+				}
+		}
+}
+
+/*CB_status CB_logbuffer_add_item(CB_t *ptr, Log *data)
+{
+
+	//Checks for Null pointer
+    if(ptr->buffptr==NULL){
+    	return(null);
+
+    }
+    CB_status s1=CB_is_full(ptr);
+    if(s1==full){	//If circular buffer is full dont add items in it
+    	return(full);
+    }
+    else{
+	*(ptr->head)=data;	//If circular buffer is not full,add items into it
+   // printf("\nvalue at %p is %d\n ",(ptr->head),*(ptr->head));
+    ptr->count=ptr->count+1;	//Increment the count after data has been added into circular buffer
+    if(ptr->head==ptr->buffptr+ptr->length-1){
+		// If head reaches end of buffer,wrap around
+        ptr->head=ptr->buffptr;
+    }
+    else{
+		//If head does not reaches end of buffer, simply increment the head pointer
+        ptr->head=ptr->head+1;
+        return(success);
+    }
+    }
+
+}*/
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////

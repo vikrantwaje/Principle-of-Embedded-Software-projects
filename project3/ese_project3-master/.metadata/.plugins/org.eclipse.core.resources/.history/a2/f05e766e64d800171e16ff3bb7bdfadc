@@ -1,0 +1,291 @@
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-nrf.h
+
+ @brief:This file includes various nrf initialisation operations
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:23 November 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Guard section*/
+#ifndef INCLUDES_NRF_H_
+#define INCLUDES_NRF_H_
+
+/*------------------------------------------------------------------------------------------------------------*/
+
+//NORDIC REGISTERS
+#define CONFIG (0x00)
+#define EN_AA (0x01)
+#define ENRX_ADDR (0x02)
+#define SETUP_AW (0x03)
+#define SETUP_RETR (0x04)
+#define RF_CH (0x05)
+#define RF_SETUP (0x06)
+#define STATUS (0x07)
+#define OBSERVE_TX (0x08)
+#define CD (0x09)
+#define RX_ADDR_P0 (0x0A)
+#define RX_ADDR_P1 (0x0B)
+#define RX_ADDR_P2 (0x0C)
+#define RX_ADDR_P3 (0x0D)
+#define RX_ADDR_P4 (0x0E)
+#define RX_ADDR_P5 (0x0F)
+#define TX_ADDR (0x10)
+#define RX_PW_P0 (0x11)
+#define RX_PW_P1 (0x12)
+#define RX_PW_P2 (0x13)
+#define RX_PW_P3 (0x14)
+#define RX_PW_P4 (0x15)
+#define RX_PW_P5 (0x16)
+#define FIFO_STATUS (0x17)
+
+//NORDIC COMMAND NAME
+#define READREGISTER (0x00)
+#define WRITEREGISTER (0x20)
+#define RXPAYLOAD (0x61)
+#define TXPAYLOAD (0xA0)
+#define FLUSHTX (0xE1)
+#define FLUSHRX (0xE2)
+#define REUSETXPL (0xE3)
+#define NOP (0xFF)
+
+//CONFIG REGISTER BIT ACCESS
+#define MASK_RX_DR(x) (uint8_t((x)<<6))
+#define MASK_TX_DS(x) (uint8_t((x)<<5))
+#define MASK_MAX_RT(x) (uint8_t((x)<<4))
+#define EN_CRC(x)		(uint8_t((x)<<3))
+#define CRCO(x)		   (uint8_t((x)<<2))
+#define PWR_UP(x)  	   (uint8_t((x)<<1))
+#define PRIM_RX			(uint8_t((x)<<0))
+
+
+/*------------------------Macros*-------------------------------------------------------------------------*/
+//PA18 AS CHIP SELECT
+
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Chip enable
+
+  This macro basically enables chip select
+
+ @param:None
+
+
+ @return: None.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+__inline__ void nrf_chip_enable();
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: Chip disable
+
+  This macro basically disables chip select
+
+ @param:None
+
+
+ @return: None.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+__inline__ void nrf_chip_disable();
+/*------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read register
+
+  This function basically reads register
+
+ @param:Address of register that is to be read
+
+
+ @return: Value that is to be returned after being read.
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+
+uint8_t nrf_read_register(uint8_t registeraddress);
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write register
+
+  This function basically writes register
+
+ @param:Address of register that is to be written
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void nrf_write_register(uint8_t registeraddress,uint8_t value);
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read status
+
+  This function reads status from status register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t nrf_read_status();
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write configuration
+
+  This function writes into configuration register
+
+ @param:configuration that is to be set
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_write_config(uint8_t config);
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read configuration
+
+  This function reads from configuration register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t read_config();
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read rf setup
+
+  This function reads from configuration register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t nrf_read_rf_setup();
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write rf setup
+
+  This function write to configuration register
+
+ @param:Configuration that is to be written
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+
+void nrf_write_rf_setup(uint8_t config);
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read rf channel
+
+  This function reads from RF channel register
+
+ @param:None
+
+
+ @return:Returns value that is read
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t nrf_read_rf_ch();
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write rf channel register
+
+  This function write to rf channel register
+
+ @param:Channel that is to be written
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_write_rf_ch(uint8_t channel);
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read TX ADDR channel
+
+  This function reads from TX ADDR register
+
+ @param: Address of TX addr register
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_read_TX_ADDR(uint8_t *address);
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF write TX ADDR channel
+
+  This function writes into TX ADDR register
+
+ @param: Address of TX addr register
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_write_TX_ADDR(uint8_t *tx_addr);
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF read rf_fifo status channel
+
+  This function reads from fifo status register
+
+ @param:None
+
+
+ @return:Returns status that is read
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+uint8_t nrf_read_fifo_status();
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF flush tx fifo
+
+  This function flushes the tx fifo register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_flush_tx_fifo();
+/*---------------------------------------------------------------------------------------------------------------------------*/
+/*
+  @brief: NRF flush rx fifp
+
+  This function flushes the rx fifo register
+
+ @param:None
+
+
+ @return:None
+ */
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+void nrf_flush_rx_fifo();
+
+
+
+
+#endif /* INCLUDES_NRF_H_ */

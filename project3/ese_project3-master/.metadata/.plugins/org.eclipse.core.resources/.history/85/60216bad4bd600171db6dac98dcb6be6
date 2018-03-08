@@ -1,0 +1,87 @@
+ /*-----------------------------------------------------------------------------------------------------------------------------------*/
+ /* 0.Documentation section
+  -----------------------------------------------------------------------------------------------------------------------------------
+
+  @file-project2.c
+
+ @brief:This file intilises all the buffers, generates buffer report and
+ 	 	- takes care of displaying required elements through UART.
+
+ @author: Vikrant Waje and Kiran Hegde
+
+ @date:29 October 2017
+
+
+ */
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+/*1. Preprocessor Directives*/
+
+#include "MKL25Z4.h"
+#include<stdint.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"uart.h"
+#include"cb.h"
+#include "project2.h"
+
+/*---------------------------------------------------------------------------------------------------------------------*/
+/* Global declaration */
+uint8_t ki;
+uint8_t *pointer=&ki;
+CB_t *tx;
+CB_t *rx;
+uint8_t  *loc;
+uint8_t c;
+uint8_t f;
+uint8_t alphacount=0;
+uint8_t numericcount=0;
+uint8_t count=0;
+uint8_t b;
+uint8_t *receive=&b;
+uint8_t s1=10;
+uint8_t s2=10;
+uint8_t e;
+uint8_t *receivea=&e;
+/*---------------------------------------------------------------------------------------------------------------------*/
+
+/* Function declaration */
+/*
+  @brief: Calling of all initialise function and displaying the report
+
+  This function calls all the initialization functions and takes care of displaying the required
+  elements on the serial terminal
+
+ @param: None
+
+ @return: None
+ */
+
+/*----------------------------------------------------------------------------------------------------------------------------*/
+void project2()
+{
+	tx=malloc(sizeof(CB_t));
+	rx=malloc(sizeof(CB_t));
+	CB_init(tx,18);					/*Initialing the circular buffer for storing character*/
+	CB_init(rx,9);					/*Initialising the buffer for transmitting character to terminal*/
+	UART_configure();				/* Configuring UART*/
+	UART_send_n("\n\r",2);
+	UART_send_n("\n\rWelcome to ECEN5813 Project2\n\r",32);
+
+	CB_buffer_add_item(tx,5);
+	x=1;
+	if(x==1){
+
+		UART0_C2 |= 0x00000080;
+	}
+	while(1)
+	{
+
+	}
+}
+/*--------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// EOF
+////////////////////////////////////////////////////////////////////////////////
